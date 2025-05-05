@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Web3 from 'web3';
-import { Loader2, Volume2, VolumeX, TrendingUp } from 'lucide-react';
+import { Loader2, Volume2, VolumeX } from 'lucide-react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { Notification } from '../components/Notification';
@@ -66,14 +66,7 @@ export function ClickGame() {
   const { walletState } = useWallet();
   const [web3, setWeb3] = useState<Web3 | null>(null);
   const [contract, setContract] = useState<any>(null);
-  const [fee, setFee] = useState('0');
-  const [isSoundMuted, setIsSoundMuted] = useState(() => {
-    return localStorage.getItem('soundMuted') === 'true';
-  });
-  const [isWithdrawing, setIsWithdrawing] = useState(false);
-  const [isUpgrading, setIsUpgrading] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const clickTimeoutRef = useRef(null);
+  const clickTimeoutRef = useRef(null); // Remove if not used
   const lastClickTimeRef = useRef(0);
 
   useEffect(() => {
