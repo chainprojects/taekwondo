@@ -159,7 +159,7 @@ export function ClickGame() {
     setIsUpgrading(true);
     try {
       // Deduct upgrade cost
-      setClickData(prev => ({
+      setClickData((prev: ClickData) => ({
         ...prev,
         earnedTokens: prev.earnedTokens - upgradeCost
       }));

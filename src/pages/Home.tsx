@@ -196,3 +196,10 @@ export function Home() {
     </div>
   );
 }
+import {
+  Gamepad,
+  Users,
+  Calendar,
+  Gift
+  // Remove: Coins, ArrowRight, Zap, DollarSign, Wallet if not used
+} from 'lucide-react';
