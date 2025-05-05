@@ -49,6 +49,8 @@ const sounds = [
 ];
 
 // Helper function to get current belt based on level
+
+// Helper function to get current belt based on level
 const getCurrentBelt = (level: number) => {
   const beltIndex = Math.min(Math.floor((level - 1) / LEVELS_PER_BELT), BELT_IMAGES.length - 1);
   return BELT_IMAGES[beltIndex];
@@ -63,18 +65,17 @@ export function ClickGame() {
   const { notification, showNotification, hideNotification } = useNotification();
   const { walletState } = useWallet();
   const [web3, setWeb3] = useState<Web3 | null>(null);
-  const [contract, setContract] = useState<any>(null);
-  const lastClickTimeRef = useRef(0);
-
-  // Add these missing declarations:
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [contract, setContract] = useState<any>(null); // Replace 'any' with your contract type if available
+  // Removed: const [fee, setFee] = useState('0');
+  // Removed: const clickTimeoutRef = useRef(null);
   const [isSoundMuted, setIsSoundMuted] = useState(() => {
     return localStorage.getItem('soundMuted') === 'true';
   });
-  const [isUpgrading, setIsUpgrading] = useState(false);
-  // Remove unused 'fee' if not used elsewhere
-  // const [fee, setFee] = useState<number | string>(0);
   const [isWithdrawing, setIsWithdrawing] = useState(false);
+  const [isUpgrading, setIsUpgrading] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const clickTimeoutRef = useRef(null);
+  const lastClickTimeRef = useRef(0);
 
   useEffect(() => {
     audioRef.current = new Audio();
@@ -159,7 +160,7 @@ export function ClickGame() {
     setIsUpgrading(true);
     try {
       // Deduct upgrade cost
-      setClickData((prev: ClickData) => ({
+      setClickData(prev => ({
         ...prev,
         earnedTokens: prev.earnedTokens - upgradeCost
       }));
@@ -187,7 +188,7 @@ export function ClickGame() {
         setContract(contractInstance);
         try {
           const feeAmount = await contractInstance.methods.withdrawalFee().call();
-          setFee(feeAmount);
+          setFee(feeAmount.toString());
         } catch (error) {
           console.error('Error fetching fee:', error);
         }
@@ -222,7 +223,7 @@ export function ClickGame() {
     }));
 
     // Update click data
-    setClickData(prev => ({
+    setClickData((prev: ClickData) => ({
       earnedTokens: prev.earnedTokens + tokensEarned,
       totalEarned: prev.totalEarned + tokensEarned,
       totalClicks: prev.totalClicks + 1
@@ -277,27 +278,19 @@ export function ClickGame() {
 
     setIsWithdrawing(true);
     try {
-      // Example fix for TS6133: Remove unused 'tx'
-      try {
-        await contract.methods.withdraw(web3.utils.toWei(amount.toString(), 'ether')).send({
-          from: walletState.address
-        });
-      
-        setClickData((prev: ClickData) => ({
-          ...prev,
-          earnedTokens: prev.earnedTokens - amount
-        }));
-      
-        setWithdrawAmount('');
-        showNotification('success', 'Withdrawal successful!');
-      } catch (error) {
-        console.error('Withdrawal failed:', error);
-        showNotification('error', 'Withdrawal failed. Please try again.');
-      } finally {
-        setIsWithdrawing(false);
-      }
+      await contract.methods.withdraw(web3.utils.toWei(amount.toString(), 'ether')).send({
+        from: walletState.address
+      });
+
+      setClickData(prev => ({
+        ...prev,
+        earnedTokens: prev.earnedTokens - amount
+      }));
+
+      setWithdrawAmount('');
+      showNotification('success', 'Withdrawal successful!');
     } catch (error) {
-      setWithdrawAmount(''); // Always a string
+      console.error('Withdrawal failed:', error);
       showNotification('error', 'Withdrawal failed. Please try again.');
     } finally {
       setIsWithdrawing(false);
@@ -328,11 +321,11 @@ export function ClickGame() {
           </div>
           <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-4 md:p-6 rounded-2xl shadow-[0_10px_20px_rgba(0,0,0,0.3)] transform hover:scale-105 transition-all duration-300 backdrop-blur-lg bg-opacity-90">
             <h3 className="text-xl md:text-2xl font-bold text-purple-100 mb-2">Tokens Earned</h3>
-            <p className="text-purple-200 text-lg">{clickData.earnedTokens.toFixed(2)} TKDC</p>
+            <p className="text-purple-200 text-lg">{clickData.earnedTokens.toFixed(2)} TKD</p>
           </div>
           <div className="bg-gradient-to-r from-green-600 to-green-800 p-4 md:p-6 rounded-2xl shadow-[0_10px_20px_rgba(0,0,0,0.3)] transform hover:scale-105 transition-all duration-300 backdrop-blur-lg bg-opacity-90 sm:col-span-2 md:col-span-1">
             <h3 className="text-xl md:text-2xl font-bold text-green-100 mb-2">Daily Progress</h3>
-            <p className="text-green-200 text-lg">{dailyTokensEarned.toFixed(2)} / {dailyLimit} TKDC</p>
+            <p className="text-green-200 text-lg">{dailyTokensEarned.toFixed(2)} / {dailyLimit} TKD</p>
           </div>
         </div>
 
@@ -351,7 +344,7 @@ export function ClickGame() {
           {/* Upgrade Section */}
           <div className="bg-gradient-to-r from-amber-600 to-amber-800 p-4 md:p-6 rounded-2xl shadow-[0_10px_20px_rgba(0,0,0,0.3)] transform hover:scale-105 transition-all duration-300 backdrop-blur-lg bg-opacity-90">
             <h3 className="text-xl md:text-2xl font-bold text-amber-100 mb-3">Level Up</h3>
-            <p className="text-amber-200 text-lg mb-4">Cost: {upgradeCost} TKDC</p>
+            <p className="text-amber-200 text-lg mb-4">Cost: {upgradeCost} TKD</p>
             <button
               onClick={handleLevelUpgrade}
               disabled={isUpgrading || clickData.earnedTokens < upgradeCost}

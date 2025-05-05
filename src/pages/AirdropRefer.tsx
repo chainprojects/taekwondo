@@ -13,7 +13,7 @@ export function AirdropRefer() {
   const { notification, showNotification, hideNotification } = useNotification();
   const [uplinerAddress, setUplinerAddress] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [referralStats] = useState({
+  const [referralStats, setReferralStats] = useState({
     count: 0,
     income: 0,
   });
@@ -41,8 +41,8 @@ export function AirdropRefer() {
               contractInstance.methods.airdropFee().call()
             ]);
 
-            setReferralFee(web3.utils.fromWei(refFee, 'ether'));
-            setAirdropFee(web3.utils.fromWei(airFee, 'ether'));
+            setReferralFee(refFee);
+            setAirdropFee(airFee);
           }
         } catch (error) {
           console.error('Error initializing contract:', error);
@@ -77,12 +77,11 @@ export function AirdropRefer() {
       const gasPrice = await web3.eth.getGasPrice();
       const adjustedGasPrice = Math.floor(Number(gasPrice) * 1.1).toString();
 
-      const referralFeeWei = web3.utils.toWei(referralFee, 'ether');
       const gasEstimate = await contract.methods
         .registerReferral(uplinerAddress)
         .estimateGas({
           from: walletState.address,
-          value: referralFeeWei,
+          value: referralFee,
           gasPrice: adjustedGasPrice
         });
 
@@ -92,7 +91,7 @@ export function AirdropRefer() {
         from: walletState.address,
         gas: gasLimit,
         gasPrice: adjustedGasPrice,
-        value: referralFeeWei,
+        value: referralFee,
       });
 
       showNotification('success', 'Referral registered successfully!');
@@ -133,7 +132,7 @@ export function AirdropRefer() {
         throw new Error('network_error');
       }
 
-      const hasClaimed = await contract.methods
+      const hasClaimed = await contract. methods
         .hasClaimed(walletState.address)
         .call();
 
@@ -154,10 +153,9 @@ export function AirdropRefer() {
       const gasPrice = await web3.eth.getGasPrice();
       const adjustedGasPrice = Math.floor(Number(gasPrice) * 1.1).toString();
 
-      const airdropFeeWei = web3.utils.toWei(airdropFee, 'ether');
       const gasEstimate = await contract.methods.claimAirdrop().estimateGas({
         from: walletState.address,
-        value: airdropFeeWei,
+        value: airdropFee,
         gasPrice: adjustedGasPrice
       });
 
@@ -167,7 +165,7 @@ export function AirdropRefer() {
         from: walletState.address,
         gas: gasLimit,
         gasPrice: adjustedGasPrice,
-        value: airdropFeeWei,
+        value: airdropFee,
       });
 
       showNotification('success', 'Airdrop claimed successfully!');
@@ -204,8 +202,28 @@ export function AirdropRefer() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#141e30] to-[#243b55] text-white">
-      <Header />
+    <div
+    className="min-h-screen flex flex-col bg-gray-900 text-white relative"
+    style={{
+      backgroundImage: "url('https://smallseomachine.com/taek/tae1%20(1).png')",
+      backgroundSize: 'auto',
+      backgroundPosition: 'left',
+      backgroundRepeat: 'no-repeat',
+    }}
+  >  
+ 
+     
+   <Header />
+
+   <div
+    
+    style={{
+      backgroundImage: "url('https://smallseomachine.com/taek/tae1%20(2).png')",
+      backgroundSize: 'auto',
+      backgroundPosition: 'right',
+      backgroundRepeat: 'no-repeat',
+    }}
+  >  
       
       {notification && (
         <Notification
@@ -250,7 +268,11 @@ export function AirdropRefer() {
             <Gift className="text-[#61dafb]" />
             Airdrop Claim
           </h2>
-          
+          <img
+    src="https://smallseomachine.com/taek/tae1%20(7).png" // Replace with your image URL
+    alt="Daily Claim Illustration"
+    className="w-48 h-auto mx-auto mb-6 rounded-lg shadow-md"
+  />
           <div className="space-y-4">
             <div>
               <input
@@ -304,6 +326,6 @@ export function AirdropRefer() {
       </main>
 
       <Footer />
-    </div>
+    </div></div>
   );
 }

@@ -6,7 +6,7 @@ import { Notification } from '../components/Notification';
 import { useNotification } from '../hooks/useNotification';
 import { useWallet } from '../context/WalletContext';
 
-const DAILY_CLAIM_CONTRACT_ADDRESS = '0x355831d96298a26d1C782c42a7737c51F1FD49eb';
+const DAILY_CLAIM_CONTRACT_ADDRESS = '0x7cac04cA35e77d2D927f5fA0C38832a293580872';
 const DAILY_CLAIM_ABI = [
   {"inputs":[{"internalType":"address","name":"_token","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},
   {"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"newAmount","type":"uint256"}],"name":"ClaimAmountUpdated","type":"event"},

@@ -11,11 +11,6 @@ import { Binance } from "@thirdweb-dev/chains";
 function App() {
   const clientId = import.meta.env.VITE_THIRDWEB_CLIENT_ID;
 
-  if (!clientId) {
-    console.error('ThirdWeb Client ID is not configured');
-    return <div>Configuration Error: Please check application setup</div>;
-  }
-
   return (
     <ThirdwebProvider 
       clientId={clientId}
@@ -32,13 +27,6 @@ function App() {
         logoUrl: "https://smallseomachine.com/taek/tae1%20(1).png",
         url: window.location.origin,
         isDarkMode: true
-      }}
-      sdkOptions={{
-        gasless: { openzeppelin: { relayerUrl: '' } },
-        readonlySettings: {
-          rpcUrl: "https://bsc-dataseed.binance.org",
-          chainId: 56
-        }
       }}
     >
       <WalletProvider>

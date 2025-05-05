@@ -17,8 +17,8 @@ import { useNotification } from '../hooks/useNotification';
 import { Notification } from '../components/Notification';
 
 // Token Configuration
-const TOKEN_ADDRESS = '0xeAab5F02FaB4288B6d025623BBb3d6094ad45fe7';
-const TOKEN_SYMBOL = 'TKDC';
+const TOKEN_ADDRESS = '0x1Db564D39f45642519b366Ce24E991dDA1041116';
+const TOKEN_SYMBOL = 'TKD';
 const TOKEN_DECIMALS = 18;
 
 export function Home() {
@@ -45,7 +45,7 @@ export function Home() {
             address: 0xeAab5F02FaB4288B6d025623BBb3d6094ad45fe7,
             symbol: TKDC,
             decimals: 18,
-            image: 'white-belt.png',
+            image: 'https://smallseomachine.com/taek/tae1%20(1).png',
           },
         },
       });
@@ -196,10 +196,3 @@ export function Home() {
     </div>
   );
 }
-import {
-  Gamepad,
-  Users,
-  Calendar,
-  Gift
-  // Remove: Coins, ArrowRight, Zap, DollarSign, Wallet if not used
-} from 'lucide-react';
