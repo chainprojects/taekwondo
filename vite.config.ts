@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: "/my-repo/",
+  base: "/tkdccoin/",
   server: {
     host: true,
     port: 5173,
