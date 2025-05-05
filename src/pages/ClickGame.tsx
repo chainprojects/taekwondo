@@ -49,8 +49,6 @@ const sounds = [
 ];
 
 // Helper function to get current belt based on level
-
-// Helper function to get current belt based on level
 const getCurrentBelt = (level: number) => {
   const beltIndex = Math.min(Math.floor((level - 1) / LEVELS_PER_BELT), BELT_IMAGES.length - 1);
   return BELT_IMAGES[beltIndex];
@@ -66,7 +64,6 @@ export function ClickGame() {
   const { walletState } = useWallet();
   const [web3, setWeb3] = useState<Web3 | null>(null);
   const [contract, setContract] = useState<any>(null);
-  const clickTimeoutRef = useRef(null); // Remove if not used
   const lastClickTimeRef = useRef(0);
 
   useEffect(() => {
