@@ -74,7 +74,6 @@ export function ClickGame() {
   const [isWithdrawing, setIsWithdrawing] = useState(false);
   const [isUpgrading, setIsUpgrading] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const clickTimeoutRef = useRef(null);
   const lastClickTimeRef = useRef(0);
 
   useEffect(() => {
@@ -186,12 +185,7 @@ export function ClickGame() {
         setWeb3(web3Instance);
         const contractInstance = new web3Instance.eth.Contract(CLICK_GAME_ABI, CLICK_GAME_ADDRESS);
         setContract(contractInstance);
-        try {
-          const feeAmount = await contractInstance.methods.withdrawalFee().call();
-          setFee(feeAmount.toString());
-        } catch (error) {
-          console.error('Error fetching fee:', error);
-        }
+        // Removed setFee call
       }
     };
     initWeb3();
@@ -278,11 +272,12 @@ export function ClickGame() {
 
     setIsWithdrawing(true);
     try {
-      await contract.methods.withdraw(web3.utils.toWei(amount.toString(), 'ether')).send({
+      // Use withdrawTokens if that's the correct method in your contract ABI
+      await contract.methods.withdrawTokens(web3.utils.toWei(amount.toString(), 'ether')).send({
         from: walletState.address
       });
 
-      setClickData(prev => ({
+      setClickData((prev: ClickData) => ({
         ...prev,
         earnedTokens: prev.earnedTokens - amount
       }));
