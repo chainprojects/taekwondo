@@ -277,12 +277,6 @@ export function ClickGame() {
 
     setIsWithdrawing(true);
     try {
-      // Example fix for TS7006: Add type annotation to 'prev'
-      setClickData((prev: ClickData) => ({
-        ...prev,
-        earnedTokens: prev.earnedTokens - upgradeCost
-      }));
-
       // Example fix for TS6133: Remove unused 'tx'
       try {
         await contract.methods.withdraw(web3.utils.toWei(amount.toString(), 'ether')).send({
