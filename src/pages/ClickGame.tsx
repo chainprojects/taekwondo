@@ -72,7 +72,8 @@ export function ClickGame() {
     return localStorage.getItem('soundMuted') === 'true';
   });
   const [isUpgrading, setIsUpgrading] = useState(false);
-  const [fee, setFee] = useState<number | string>(0);
+  // Remove unused 'fee' if not used elsewhere
+  // const [fee, setFee] = useState<number | string>(0);
   const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   useEffect(() => {
@@ -276,19 +277,33 @@ export function ClickGame() {
 
     setIsWithdrawing(true);
     try {
-      const tx = await contract.methods.withdraw(web3.utils.toWei(amount.toString(), 'ether')).send({
-        from: walletState.address
-      });
-
-      setClickData(prev => ({
+      // Example fix for TS7006: Add type annotation to 'prev'
+      setClickData((prev: ClickData) => ({
         ...prev,
-        earnedTokens: prev.earnedTokens - amount
+        earnedTokens: prev.earnedTokens - upgradeCost
       }));
 
-      setWithdrawAmount('');
-      showNotification('success', 'Withdrawal successful!');
+      // Example fix for TS6133: Remove unused 'tx'
+      try {
+        await contract.methods.withdraw(web3.utils.toWei(amount.toString(), 'ether')).send({
+          from: walletState.address
+        });
+      
+        setClickData((prev: ClickData) => ({
+          ...prev,
+          earnedTokens: prev.earnedTokens - amount
+        }));
+      
+        setWithdrawAmount('');
+        showNotification('success', 'Withdrawal successful!');
+      } catch (error) {
+        console.error('Withdrawal failed:', error);
+        showNotification('error', 'Withdrawal failed. Please try again.');
+      } finally {
+        setIsWithdrawing(false);
+      }
     } catch (error) {
-      console.error('Withdrawal failed:', error);
+      setWithdrawAmount(''); // Always a string
       showNotification('error', 'Withdrawal failed. Please try again.');
     } finally {
       setIsWithdrawing(false);
