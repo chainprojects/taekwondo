@@ -66,6 +66,15 @@ export function ClickGame() {
   const [contract, setContract] = useState<any>(null);
   const lastClickTimeRef = useRef(0);
 
+  // Add these missing declarations:
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isSoundMuted, setIsSoundMuted] = useState(() => {
+    return localStorage.getItem('soundMuted') === 'true';
+  });
+  const [isUpgrading, setIsUpgrading] = useState(false);
+  const [fee, setFee] = useState<number | string>(0);
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
+
   useEffect(() => {
     audioRef.current = new Audio();
     audioRef.current.preload = 'auto';
