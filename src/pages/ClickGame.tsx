@@ -64,8 +64,8 @@ const getTokensPerClick = (level: number) => {
 export function ClickGame() {
   const { notification, showNotification, hideNotification } = useNotification();
   const { walletState } = useWallet();
-  const [web3, setWeb3] = useState(null);
-  const [contract, setContract] = useState(null);
+  const [web3, setWeb3] = useState<Web3 | null>(null);
+  const [contract, setContract] = useState<any>(null);
   const [fee, setFee] = useState('0');
   const [isSoundMuted, setIsSoundMuted] = useState(() => {
     return localStorage.getItem('soundMuted') === 'true';
